@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import connection
 from django.test import TestCase
 
-from todoapp.todos import utils as todos_utils
+from .. import utils as todos_utils
 
 
 class TestSetupMixin(object):
@@ -64,6 +64,17 @@ class ORMUtilTest(TestSetupMixin, TestCase):
 
     def test_fetch_all_todo_list_with_user_details(self):
         expected_data = [
+             {
+                "id": 1,
+                "name": "TODO - 1",
+                "status": "To Do",
+                "created_at": "05:30 AM, 25 Dec, 2021",
+                "creator": {
+                    "first_name": "Amal",
+                    "last_name": "Raj",
+                    "email": "amal.raj@joshtechnologygroup.com"
+                }
+            },
             {
                 "id": 2,
                 "name": "TODO - 2",
@@ -1243,16 +1254,6 @@ class ORMUtilTest(TestSetupMixin, TestCase):
                     "first_name": "Chirag",
                     "last_name": "Gupta",
                     "email": "chirag.gupta@joshtechnologygroup.com"
-                }
-            }, {
-                "id": 1,
-                "name": "TODO - 1",
-                "status": "To Do",
-                "created_at": "05:30 AM, 25 Dec, 2021",
-                "creator": {
-                    "first_name": "Amal",
-                    "last_name": "Raj",
-                    "email": "amal.raj@joshtechnologygroup.com"
                 }
             }
         ]

@@ -141,3 +141,15 @@ class UserWiseProjectStatusSerializer(serializers.ModelSerializer):
 
     def get_completed_projects(self, obj):
         return obj.completed if obj.completed else []
+    
+
+class TodoApiViewSetSerializer(serializers.ModelSerializer):
+    todo = serializers.CharField(source='name')
+    class Meta:
+        model = Todo
+        fields = [ 'user','todo','done']
+
+class TodoUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ['todo', 'done']

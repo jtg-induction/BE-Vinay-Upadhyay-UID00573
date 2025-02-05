@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
-from todos.models import Todo
-from users.serializers import UserSerializer
-from projects.models import Project
 from django.db.models import Count, Q
+from rest_framework import serializers
+
+from projects.models import Project
+from todos.models import Todo
 from users.models import CustomUser
+from users.serializers import UserSerializer
 
 
 class TodoSerializer(serializers.ModelSerializer):
@@ -141,3 +142,25 @@ class UserWiseProjectStatusSerializer(serializers.ModelSerializer):
 
     def get_completed_projects(self, obj):
         return obj.completed if obj.completed else []
+    
+
+class TodoApiViewSetCreateSerializer(serializers.ModelSerializer):
+    todo = serializers.CharField(source='name')
+    user_id = serializers.PrimaryKeyRelatedField(source='user', queryset = get_user_model().objects.all())
+    class Meta:
+        model = Todo
+        fields = [ 'user_id','todo']
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return {
+                "name": representation["todo"],
+                "done" : instance.done,
+                "Date_created" : instance.date_created.isoformat()
+
+            }
+class TodoViewSetSerialzer(serializers.ModelSerializer):
+    todo_id = serializers.IntegerField(source='id')
+    todo = serializers.CharField(source='name')
+    class Meta:
+        model = Todo
+        fields = ['todo_id','todo','done']    

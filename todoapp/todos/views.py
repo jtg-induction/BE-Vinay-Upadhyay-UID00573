@@ -1,3 +1,7 @@
+from rest_framework import serializers, status
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status, serializers
@@ -7,6 +11,9 @@ from .serializers import TodoApiViewSetSerializer
 from rest_framework.settings import api_settings
 from .serializers import TodoUpdateSerializer
 from .models import Todo
+
+from .models import Todo
+from .serializers import TodoApiViewSetCreateSerializer, TodoViewSetSerialzer
 
 
 class TodoAPIViewSet(ModelViewSet):
@@ -28,7 +35,19 @@ class TodoAPIViewSet(ModelViewSet):
         ]
     """
     queryset = Todo.objects.all()
+
     def get_serializer_class(self):
         if self.action in ['update', 'partial_update']:
             return TodoUpdateSerializer
         return TodoApiViewSetSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+             return TodoApiViewSetCreateSerializer
+        return TodoViewSetSerialzer
+
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id',None)
+        if user_id is not None:
+            return Todo.objects.filter(user__id=user_id)
+        return Todo.objects.all()

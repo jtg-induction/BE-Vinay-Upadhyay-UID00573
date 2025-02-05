@@ -1,7 +1,8 @@
-
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.db.models import UniqueConstraint
+
+
 class Project(models.Model):
     """
         Needed fields
@@ -43,15 +44,12 @@ class ProjectMember(models.Model):
     Add string representation for this model with project name and user email/first name.
     """
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="membersofproject")
-    member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="projectsofmembers")
+    member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = "projectsofmembers")
 
     class Meta:
         constraints = [
-            UniqueConstraint (fields = ['project','member'],name='uniqueconstraints')
+            UniqueConstraint (fields = ['project', 'member'], name = 'uniqueconstraints')
         ]
 
     def __str__(self):
         return f"{self.project.name} - {self.member.email if self.member.email else self.member.first_name}"
-
-
-

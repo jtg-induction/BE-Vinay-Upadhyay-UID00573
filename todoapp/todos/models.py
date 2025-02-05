@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -15,7 +15,7 @@ class Todo(models.Model):
     name = models.CharField(_("Name Of Task"), max_length=1000)
     done = models.BooleanField(_("Completed"), default=False)
     date_created = models.DateTimeField(_("Date Of Task Created"), default=now)
-    date_completed = models.DateTimeField(_("Date Of Completion"), blank=True)
+    date_completed = models.DateTimeField(_("Date Of Completion"), blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if len(self.name) == 0:

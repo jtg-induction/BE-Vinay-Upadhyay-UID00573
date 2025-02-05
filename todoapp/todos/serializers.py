@@ -129,3 +129,25 @@ class UserWiseProjectStatusSerializer(serializers.ModelSerializer):
 
     def get_completed_projects(self, obj):
         return obj.completed if obj.completed else []
+    
+
+class TodoApiViewSetCreateSerializer(serializers.ModelSerializer):
+    todo = serializers.CharField(source='name')
+    user_id = serializers.PrimaryKeyRelatedField(source='user', queryset = get_user_model().objects.all())
+    class Meta:
+        model = Todo
+        fields = [ 'user_id','todo']
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return {
+                "name": representation["todo"],
+                "done" : instance.done,
+                "Date_created" : instance.date_created.isoformat()
+
+            }
+class TodoViewSetSerialzer(serializers.ModelSerializer):
+    todo_id = serializers.IntegerField(source='id')
+    todo = serializers.CharField(source='name')
+    class Meta:
+        model = Todo
+        fields = ['todo_id','todo','done']    

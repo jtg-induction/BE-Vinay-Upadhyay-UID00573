@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
-from django.utils.timezone import now
+from django.contrib.auth.models import BaseUserManager, PermissionsMixin
 from django.db import models
+from django.utils.timezone import now
 
 
 class UserManager(BaseUserManager):

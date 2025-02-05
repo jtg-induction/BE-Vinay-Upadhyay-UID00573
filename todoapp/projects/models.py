@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -54,6 +53,3 @@ class ProjectMember(models.Model):
 
     def __str__(self):
         return f"{self.project.name} - {self.member.email if self.member.email else self.member.first_name}"
-
-
-

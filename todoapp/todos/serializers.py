@@ -46,22 +46,18 @@ class MaxStatusSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email', 'pending_count']
 
 
+class ProjectReportSerializer(serializers.ModelSerializer):
+    pending_count = serializers.IntegerField()
+    completed_count = serializers.IntegerField()
+
+    class Meta:
+        model = users_models.CustomUser
+        fields = ["first_name", "last_name", "email", "pending_count", "completed_count"]
+            
+
 class ProjectWiseReportSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='name')
-    report = serializers.StatusSerializer(many=True)
-
-    def get_report(self, obj):
-        report = []
-        for details in obj.reports:
-            detailed_dict = {
-                "first_name": details.first_name,
-                "last_name": details.last_name,
-                "email": details.email,
-                "pending_count": details.pending_count,
-                "completed_count": details.completed_count,
-            }
-            report.append(detailed_dict)
-        return report
+    report = ProjectReportSerializer(source="reports", many=True, read_only=True)
 
     class Meta:
         model = projects_models.Project

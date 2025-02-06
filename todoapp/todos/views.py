@@ -34,20 +34,18 @@ class TodoAPIViewSet(ModelViewSet):
           }
         ]
     """
-    queryset = Todo.objects.all()
 
     def get_serializer_class(self):
-        if self.action in ['update', 'partial_update']:
-            return TodoUpdateSerializer
-        return TodoApiViewSetSerializer
-
-    def get_serializer_class(self):
+        todo_api_viewset_serializer = TodoViewSetSerialzer
         if self.action == 'create':
-             return TodoApiViewSetCreateSerializer
-        return TodoViewSetSerialzer
+             todo_api_viewset_serializer = TodoApiViewSetCreateSerializer
 
+        return todo_api_viewset_serializer
+    
     def get_queryset(self):
-        user_id = self.request.query_params.get('user_id',None)
+        user_id = self.request.query_params.get('user_id', None)
+        todo_objects = Todo.objects.all()
         if user_id is not None:
-            return Todo.objects.filter(user__id=user_id)
-        return Todo.objects.all()
+            todo_objects =  Todo.objects.filter(user__id=user_id)
+        
+        return todo_objects

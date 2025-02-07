@@ -1,16 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-from rest_framework import status, serializers
-from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import get_object_or_404
-from .serializers import TodoApiViewSetSerializer
-from rest_framework.settings import api_settings
-from .serializers import TodoUpdateSerializer
-from .models import Todo
 
 from .models import Todo
 from .serializers import TodoApiViewSetCreateSerializer, TodoViewSetSerialzer
@@ -49,3 +42,4 @@ class TodoAPIViewSet(ModelViewSet):
             todo_objects =  Todo.objects.filter(user__id=user_id)
         
         return todo_objects
+    

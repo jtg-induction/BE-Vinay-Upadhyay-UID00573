@@ -1,16 +1,3 @@
-from django.contrib.postgres.aggregates import ArrayAgg
-from .serializers import UserWiseProjectStatusSerializer
-from .serializers import ProjectWiseReportSerializer
-from django.db.models import Prefetch
-from .serializers import MemberStartWithEndA
-from .serializers import TodoWithInDateRange
-from datetime import datetime
-from users.models import CustomUser
-from django.db.models import Count, Q
-from .serializers import MaxStatusSerializer
-from .serializers import StatusSerialiser
-from projects.models import Project
-from .serializers import ProjectDetailsSerializer
 import json
 from datetime import datetime
 
@@ -26,7 +13,6 @@ from .serializers import (MaxStatusSerializer, MemberStartWithEndA,
                           ProjectWiseReportSerializer, StatusSerialiser,
                           TodoSerializer, TodoWithInDateRange,
                           UserWiseProjectStatusSerializer)
-
 
 # Add code to this util to return all users list in specified format.
 # [ {
@@ -192,7 +178,7 @@ def fetch_five_users_with_max_pending_todos():
             pending_count=Count('todostasks', filter=Q(todostasks__done=False))
         ).order_by('-pending_count')[:5]
     )
-    serializeddata = MaxStatusSerializer( users_with_pending_counts, many=True)
+    serializeddata = MaxStatusSerializer(users_with_pending_counts, many=True)
 
     return json.loads(json.dumps(serializeddata.data))
 
@@ -414,4 +400,5 @@ def fetch_user_wise_project_status():
         )
     )
     serialized_data = UserWiseProjectStatusSerializer(user, many=True)
+
     return json.loads(json.dumps(serialized_data.data))

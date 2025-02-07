@@ -76,4 +76,3 @@ class UserLoginAPIViewTestCase(APITestCase):
         response = self.client.post(self.url, {"email": self.email, "password": self.password})
         self.assertEqual(200, response.status_code)
         self.assertTrue("auth_token" in json.loads(response.content))
-

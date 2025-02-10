@@ -19,10 +19,10 @@ class UserSerializer(UserBaseSerializer):
         fields = UserBaseSerializer.Meta.fields + ['id']
 
 
-class UserRegistrationSerializer(UserBaseSerializer):
+class UserRegistrationSerializer(UserSerializer):
     password = serializers.CharField(write_only = True)
     
     class Meta:
         model = CustomUser
-        fields = UserBaseSerializer.Meta.fields + ['password', 'date_joined']
+        fields = UserSerializer.Meta.fields + ['password', 'date_joined']
     

@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from django.db.models import Q
-
+from django.db import connection
 from users.models import CustomUser
 
 from .serializers import ProjectMemberSerializer
@@ -62,7 +62,7 @@ class ProjectMemberApiViewSet(APIView):
 
                 if projects_user_count < projects_max_members:
                       users_project_counts =   ProjectMember.objects.filter(member_id=user_id).values("project").distinct().count()
-
+                      print(users_project_counts)
                       if users_project_counts < 2 : 
                           serialized_data = ProjectMemberSerializer(data = {
                            'member_id' : user_id,
@@ -72,12 +72,14 @@ class ProjectMemberApiViewSet(APIView):
                           if not serialized_data.is_valid():
                             print("invalid")
                             print(serialized_data.errors) 
-                            output_log[user_id] = {'message' : 'not successfully attached'}
+                            output_log[user_id] = {'message' : 'validation error'}
                             continue;
-                          
-                          obj = ProjectMember(**serialized_data.validated_data)
-                          bulk_create_data.append(obj)  
-                          output_log[user_id] = {'message' : 'successully added'}
+                          if bool(serialized_data.data):
+                              obj = ProjectMember(**serialized_data.validated_data)
+                              bulk_create_data.append(obj)  
+                              output_log[user_id] = {'message' : 'successully added'}
+                          else:
+                              output_log[user_id] = {'message' : 'id does not exist'}
                       else:
                           output_log[user_id] = {'message' : 'not successfully attached'}
 
@@ -86,7 +88,7 @@ class ProjectMemberApiViewSet(APIView):
           
            ProjectMember.objects.bulk_create(bulk_create_data)
            print(output_log)
-
+           print(len(connection.queries))
            return Response(output_log)
     
     def delete(self, request, *args, **kwargs):
@@ -107,8 +109,11 @@ class ProjectMemberApiViewSet(APIView):
                    print(serialized_data.error)
                    output_log[user_id] = {'message' : 'invalid credentials can not be deleted'}
                    continue
-              
-              ProjectMember.objects.filter(Q(project=int(project_id)) & Q(member=user_id)).delete()
-              output_log[user_id] = {'message' : 'successfully deleted'}
+              if bool(serialized_data):
+                  obj = ProjectMember.objects.filter(Q(project=int(project_id)) & Q(member=user_id)).delete()
+                  print(obj)
+                  output_log[user_id] = {'message' : 'successfully deleted'}
+              else:
+                   output_log[user_id] = {'message' : 'id does not exist'}
 
          return Response(output_log)

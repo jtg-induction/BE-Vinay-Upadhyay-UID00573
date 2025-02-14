@@ -64,7 +64,7 @@ class ProjectWiseReportSerializer(serializers.ModelSerializer):
         fields = ['project_title', 'report']
 
 
-class TodoWithInDateRange(serializers.ModelSerializer):
+class TodoWithInDateRangeSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
     creator = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
@@ -86,7 +86,7 @@ class TodoWithInDateRange(serializers.ModelSerializer):
         fields = ['id', 'name', 'creator', 'email', 'created_at', 'status']
 
 
-class MemberStartWithEndA(serializers.ModelSerializer):
+class MemberStartWithEndASerializer(serializers.ModelSerializer):
     project_name = serializers.CharField(source='name')
     done = serializers.SerializerMethodField()
 

@@ -7,13 +7,12 @@ from projects.models import Project
 from users.models import CustomUser
 from users.serializers import UserSerializer
 
-from .models import Todo
-from .serializers import (MaxStatusSerializer, MemberStartWithEndA,
-                          ProjectDetailsSerializer,
-                          ProjectWiseReportSerializer, StatusSerialiser,
-                          TodoSerializer, TodoWithInDateRange,
-                          UserWiseProjectStatusSerializer
-                          )
+from todos.models import Todo
+from todos.serializers import (
+    MaxStatusSerializer, MemberStartWithEndASerializer, ProjectDetailsSerializer,
+    ProjectWiseReportSerializer, StatusSerialiser, TodoSerializer, TodoWithInDateRangeSerializer,
+    UserWiseProjectStatusSerializer
+)
 
 
 # Add code to this util to return all users list in specified format.
@@ -254,7 +253,7 @@ def fetch_completed_todos_with_in_date_range(start, end):
         date_created__range=[start_date, end_date],
         done=True
     )
-    serialized_data = TodoWithInDateRange(user_data, many=True)
+    serialized_data = TodoWithInDateRangeSerializer(user_data, many=True)
 
     return json.loads(json.dumps(serialized_data.data))
     
@@ -281,7 +280,7 @@ def fetch_project_with_member_name_start_or_end_with_a():
     projects_queryset = Project.objects.filter(
         Q(members__first_name__istartswith='A')| Q(members__last_name__iendswith='A')
     ).distinct()
-    serializer_data = MemberStartWithEndA(projects_queryset, many=True)
+    serializer_data = MemberStartWithEndASerializer(projects_queryset, many=True)
 
     return json.loads(json.dumps(serializer_data.data))
 

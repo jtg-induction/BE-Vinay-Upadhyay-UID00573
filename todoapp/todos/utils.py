@@ -12,7 +12,8 @@ from .serializers import (MaxStatusSerializer, MemberStartWithEndA,
                           ProjectDetailsSerializer,
                           ProjectWiseReportSerializer, StatusSerialiser,
                           TodoSerializer, TodoWithInDateRange,
-                          UserWiseProjectStatusSerializer)
+                          UserWiseProjectStatusSerializer
+                          )
 
 
 # Add code to this util to return all users list in specified format.

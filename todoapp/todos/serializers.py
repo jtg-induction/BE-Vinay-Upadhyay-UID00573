@@ -73,8 +73,8 @@ class TodoWithInDateRangeSerializer(serializers.ModelSerializer):
     )
 
     def get_status(self, obj):
-        return "Done"
-
+        return "Done" if obj.done else "Pending"
+       
     def get_creator(self, obj):
         return obj.user.first_name + " " + obj.user.last_name
 

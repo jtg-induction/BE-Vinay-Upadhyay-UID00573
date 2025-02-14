@@ -154,3 +154,4 @@ class TodoViewSetSerialzer(serializers.ModelSerializer):
     class Meta:
         model = todos_models.Todo
         fields = ['todo_id', 'todo', 'done']    
+  

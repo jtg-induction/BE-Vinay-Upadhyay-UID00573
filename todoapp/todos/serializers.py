@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from rest_framework import serializers
+from django.utils import timezone
 
 
 from projects import models as projects_models
@@ -132,22 +133,19 @@ class UserWiseProjectStatusSerializer(serializers.ModelSerializer):
     
 
 class TodoApiViewSetCreateSerializer(serializers.ModelSerializer):
-    todo = serializers.CharField(source='name')
-    user_id = serializers.PrimaryKeyRelatedField(source='user', queryset = get_user_model().objects.all())
+    todo = serializers.CharField(source='name', write_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(source='user', queryset = get_user_model().objects.all(), write_only=True)
 
     class Meta:
         model = todos_models.Todo
-        fields = ['user_id', 'todo']
+        fields = ['user_id', 'todo', 'name', 'done']
+        read_only_fields = ['name', 'done']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-
-        return {
-                "name": representation["todo"],
-                "done" : instance.done,
-                "Date_created" : instance.date_created.isoformat()
-            }
-    
+        representation['Date_created'] = instance.date_created.isoformat()
+        return representation
+       
 
 class TodoViewSetSerialzer(serializers.ModelSerializer):
     todo_id = serializers.IntegerField(source='id')
@@ -156,3 +154,4 @@ class TodoViewSetSerialzer(serializers.ModelSerializer):
     class Meta:
         model = todos_models.Todo
         fields = ['todo_id', 'todo', 'done']    
+  

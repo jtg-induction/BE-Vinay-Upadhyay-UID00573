@@ -39,9 +39,9 @@ class TodoAPIViewSet(ModelViewSet):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        import pdb; pdb.set_trace()
         user_id = self.request.data.get('user_id', None)
         if user_id is not None:
             queryset =  queryset.filter(user__id=user_id)
 
         return queryset
+  

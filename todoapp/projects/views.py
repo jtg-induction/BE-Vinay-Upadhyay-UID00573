@@ -1,15 +1,15 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import permissions
-from django.db.models import Q
 from django.db import connection
-from users.models import CustomUser
+from django.db.models import Q
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from .serializers import ProjectMemberSerializer
-from .models import Project, ProjectMember
+from projects.models import Project
+from projects.serializers import ProjectMemberSerializer
 
 
-class ProjectMemberApiViewSet(APIView):
+class ProjectMemberApiViewSet(ModelViewSet):
     """
        constraints
         - a user can be a member of max 2 projects only
@@ -46,74 +46,14 @@ class ProjectMemberApiViewSet(APIView):
 
          there will be many other cases think of that and share on forum
     """
-
     permission_classes = [permissions.AllowAny]
+    serializer_class = ProjectMemberSerializer
 
-    def post(self, request, *args, **kwargs):
-           user_ids =  request.data.get('user_ids', [])
-           project_id = request.query_params.get('project_id')
-           project_details = Project.objects.filter(id=int(project_id))
-           projects_max_members = project_details[0].max_members
-           bulk_create_data = []
-           output_log = {}
+    def get_serializer_context(self):
+        context =  super().get_serializer_context();
+        context['action'] = self.kwargs.get('action')
+        return context
 
-           for user_id in user_ids:
-                projects_user_count = project_details.values('members').count()
-
-                if projects_user_count < projects_max_members:
-                      users_project_counts =   ProjectMember.objects.filter(member_id=user_id).values("project").distinct().count()
-                      print(users_project_counts)
-                      if users_project_counts < 2 : 
-                          serialized_data = ProjectMemberSerializer(data = {
-                           'member_id' : user_id,
-                           'project_id' : project_id
-                          }) 
-
-                          if not serialized_data.is_valid():
-                            print("invalid")
-                            print(serialized_data.errors) 
-                            output_log[user_id] = {'message' : 'validation error'}
-                            continue;
-                          if bool(serialized_data.data):
-                              obj = ProjectMember(**serialized_data.validated_data)
-                              bulk_create_data.append(obj)  
-                              output_log[user_id] = {'message' : 'successully added'}
-                          else:
-                              output_log[user_id] = {'message' : 'id does not exist'}
-                      else:
-                          output_log[user_id] = {'message' : 'not successfully attached'}
-
-                else:
-                     output_log[user_id] = {'message' : 'not successfully attached'}
-          
-           ProjectMember.objects.bulk_create(bulk_create_data)
-           print(output_log)
-           print(len(connection.queries))
-           return Response(output_log)
-    
-    def delete(self, request, *args, **kwargs):
-         user_ids = request.data.get('user_ids', [])
-         project_id = request.query_params.get('project_id')
-         output_log = {}
-
-         for user_id in user_ids:
-              
-              serialized_data = ProjectMemberSerializer(data={
-                  'project_id': int(project_id),
-                  'member_id': user_id
-              })
-              x = serialized_data.is_valid()
-              print(serialized_data.data)
-
-              if not x:
-                   print(serialized_data.error)
-                   output_log[user_id] = {'message' : 'invalid credentials can not be deleted'}
-                   continue
-              if bool(serialized_data):
-                  obj = ProjectMember.objects.filter(Q(project=int(project_id)) & Q(member=user_id)).delete()
-                  print(obj)
-                  output_log[user_id] = {'message' : 'successfully deleted'}
-              else:
-                   output_log[user_id] = {'message' : 'id does not exist'}
-
-         return Response(output_log)
+    def get_queryset(self):
+        project_id = self.kwargs.get('pk')
+        return Project.objects.filter(id=int(project_id))

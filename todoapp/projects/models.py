@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import UniqueConstraint
 
 
+
+
 class Project(models.Model):
     """
         Needed fields
@@ -42,12 +44,14 @@ class ProjectMember(models.Model):
 
     Add string representation for this model with project name and user email/first name.
     """
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="membersofproject")
-    member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = "projectsofmembers")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    member = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
-            UniqueConstraint (fields = ['project', 'member'], name = 'uniqueconstraints')
+            UniqueConstraint(fields=['project', 'member'],
+                             name='uniqueconstraints')
         ]
 
     def __str__(self):

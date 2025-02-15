@@ -1,16 +1,3 @@
-from django.contrib.postgres.aggregates import ArrayAgg
-from .serializers import UserWiseProjectStatusSerializer
-from .serializers import ProjectWiseReportSerializer
-from django.db.models import Prefetch
-from .serializers import MemberStartWithEndA
-from .serializers import TodoWithInDateRange
-from datetime import datetime
-from users.models import CustomUser
-from django.db.models import Count, Q
-from .serializers import MaxStatusSerializer
-from .serializers import StatusSerialiser
-from projects.models import Project
-from .serializers import ProjectDetailsSerializer
 import json
 from datetime import datetime
 
@@ -26,7 +13,6 @@ from todos.serializers import (
     ProjectWiseReportSerializer, StatusSerialiser, TodoSerializer, TodoWithInDateRangeSerializer,
     UserWiseProjectStatusSerializer
 )
-
 
 # Add code to this util to return all users list in specified format.
 # [ {

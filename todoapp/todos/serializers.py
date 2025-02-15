@@ -132,21 +132,15 @@ class UserWiseProjectStatusSerializer(serializers.ModelSerializer):
 
 class TodoApiViewSetCreateSerializer(serializers.ModelSerializer):
     todo = serializers.CharField(source='name')
-    user_id = serializers.PrimaryKeyRelatedField(source='user', queryset=get_user_model().objects.all())
-
+    
     class Meta:
         model = todos_models.Todo
-        fields = ['user_id', 'todo']
+        fields = ['todo', 'done', 'date_created']
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
+    def create(self, validated_data, *args, **kwargs):
+        validated_data['user_id'] = self.context['request'].user.id
+        return super().create(validated_data, *args, *kwargs)
 
-        return {
-                "name": representation["todo"],
-                "done" : instance.done,
-                "Date_created" : instance.date_created.isoformat()
-            }
-    
 
 class TodoViewSetSerialzer(serializers.ModelSerializer):
     todo_id = serializers.IntegerField(source='id')

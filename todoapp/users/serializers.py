@@ -2,7 +2,7 @@
 # Add your serializers
 from rest_framework import serializers
 
-from .models import CustomUser
+from users.models import CustomUser
 
 
 class UserBaseSerializer(serializers.ModelSerializer):
@@ -25,4 +25,3 @@ class UserRegistrationSerializer(UserBaseSerializer):
     class Meta:
         model = CustomUser
         fields = UserBaseSerializer.Meta.fields + ['password', 'date_joined']
-    

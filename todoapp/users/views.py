@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate
 from rest_framework import generics, permissions, response, views
 from rest_framework.authtoken.models import Token
 
-from .models import CustomUser
-from .serializers import UserRegistrationSerializer
+from users.models import CustomUser
+from users.serializers import UserRegistrationSerializer
 
 
 class UserRegistrationAPIView(generics.CreateAPIView, generics.GenericAPIView):
@@ -22,8 +22,10 @@ class UserRegistrationAPIView(generics.CreateAPIView, generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serialized_data = self.get_serializer(data=request.data)
+
         if not serialized_data.is_valid():
             return response.Response(serialized_data.errors)
+        
         data = serialized_data.validated_data
         user = CustomUser.objects.create_user(**data)
         token, created = Token.objects.get_or_create(user=user)
@@ -40,12 +42,13 @@ class UserLoginAPIView(views.APIView):
          }
     """
     permission_classes = [permissions.AllowAny]
+
     def post(self, request, *args, **kwargs):
         user = authenticate(username=request.data['email'], password=request.data['password'])
         respons = response.Response({'error' : 'Invalid credentials'}, status=401)
+
         if user:
             token, created = Token.objects.get_or_create(user=user)
             respons = response.Response({'token': token.key})
       
         return respons
-        

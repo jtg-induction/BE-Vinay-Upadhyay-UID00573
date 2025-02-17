@@ -14,6 +14,7 @@ from todos.serializers import (
     UserWiseProjectStatusSerializer
 )
 
+
 # Add code to this util to return all users list in specified format.
 # [ {
 #   "id": 1,

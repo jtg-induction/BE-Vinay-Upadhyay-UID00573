@@ -44,4 +44,3 @@ class TodoAPIViewSet(ModelViewSet):
             queryset =  queryset.filter(user__id=user_id)
 
         return queryset
-  

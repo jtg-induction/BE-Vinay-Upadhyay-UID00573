@@ -1,8 +1,4 @@
-from django.db import connection
-from django.db.models import Q
 from rest_framework import permissions
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from projects.models import Project
@@ -46,7 +42,7 @@ class ProjectMemberApiViewSet(ModelViewSet):
 
          there will be many other cases think of that and share on forum
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProjectMemberSerializer
 
     def get_serializer_context(self):

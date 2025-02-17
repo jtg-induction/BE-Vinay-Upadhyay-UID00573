@@ -10,15 +10,15 @@ from projects.models import ProjectMember
  # Fetch the Custom User model
 
 class ProjectMemberSerializer(serializers.ModelSerializer):
-    user_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=CustomUser.objects.all(), write_only=True)
+    user_objects = serializers.PrimaryKeyRelatedField(many=True, queryset=CustomUser.objects.all(), write_only=True)
     
     class Meta:
         model = Project
-        fields = ['user_ids'] 
+        fields = ['user_objects'] 
 
     def update(self, instance, validated_data):
         action = self.context['action']
-        validated_user_ids = [user.id for user in validated_data['user_ids']]
+        validated_user_ids = [user.id for user in validated_data['user_objects']]
         project_member_list = instance.members.values_list('id', flat=True)
         
         log = {}
@@ -27,7 +27,6 @@ class ProjectMemberSerializer(serializers.ModelSerializer):
             user_projects = list(get_user_model().objects.filter(id__in=validated_user_ids).annotate(
                 project_ids = ArrayAgg('allprojects__id'
             )))
-            print(user_projects[0].project_ids)
             project_member_instance = []
             
             for user in user_projects:
@@ -43,13 +42,16 @@ class ProjectMemberSerializer(serializers.ModelSerializer):
           
             ProjectMember.objects.bulk_create(project_member_instance)
         
-        else:
+        elif action == 'remove':
             for user_id in validated_user_ids:
                 if user_id in project_member_list:
                     ProjectMember.objects.filter(project_id=instance.id, member_id=user_id).delete()
                     log[user_id] = 'deleted successfully'
                 else:
                     log[user_id] = 'user is not a member'
+        
+        else:
+            log[action] = 'action is not allowed'
         
         self.context['log'] = log
 

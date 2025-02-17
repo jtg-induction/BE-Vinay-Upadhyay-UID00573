@@ -8,13 +8,11 @@ from users.models import CustomUser
 from users.serializers import UserSerializer
 
 from .models import Todo
-from .serializers import (
-    MaxStatusSerializer, MemberStartWithEndA,
-    ProjectDetailsSerializer,
-    ProjectWiseReportSerializer, StatusSerialiser,
-    TodoSerializer, TodoWithInDateRange,
-    UserWiseProjectStatusSerializer
-)
+from .serializers import (MaxStatusSerializer, MemberStartWithEndA,
+                          ProjectDetailsSerializer,
+                          ProjectWiseReportSerializer, StatusSerialiser,
+                          TodoSerializer, TodoWithInDateRange,
+                          UserWiseProjectStatusSerializer)
 
 # Add code to this util to return all users list in specified format.
 # [ {

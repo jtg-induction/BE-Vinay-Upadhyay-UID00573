@@ -134,4 +134,3 @@ class ProjectMemberAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data['log'][self.user1.id], 'user is not a member')
-    

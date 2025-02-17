@@ -44,7 +44,7 @@ class ProjectMember(models.Model):
     """
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="membersofproject")
     member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = "projectsofmembers")
-    
+
     class Meta:
         constraints = [
             UniqueConstraint (fields = ['project', 'member'], name = 'uniqueconstraints')

@@ -1244,7 +1244,7 @@ class ORMUtilTest(TestSetupMixin, TestCase):
                     "last_name": "Gupta",
                     "email": "chirag.gupta@joshtechnologygroup.com"
                 }
-            },{
+            }, {
                 "id": 1,
                 "name": "TODO - 1",
                 "status": "To Do",

@@ -22,7 +22,7 @@ class Todo(models.Model):
         if self.done and not self.date_completed:
             self.date_completed = now()
         elif not self.done:
-            self.date_completed = None 
+            self.date_completed = None  
         super().save(*args, **kwargs)
 
     def __str__(self):

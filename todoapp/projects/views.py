@@ -48,8 +48,10 @@ class ProjectMemberApiViewSet(ModelViewSet):
     def get_serializer_context(self):
         context =  super().get_serializer_context();
         context['action'] = self.kwargs.get('action')
+
         return context
 
     def get_queryset(self):
         project_id = self.kwargs.get('pk')
+        
         return Project.objects.filter(id=int(project_id))

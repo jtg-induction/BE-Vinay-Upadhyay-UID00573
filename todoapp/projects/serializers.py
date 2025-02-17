@@ -3,9 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.aggregates import ArrayAgg
 
 
-from projects.models import Project
+from projects.models import Project, ProjectMember
 from users.models import CustomUser
-from projects.models import ProjectMember
 
  # Fetch the Custom User model
 
@@ -60,4 +59,5 @@ class ProjectMemberSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = {}
         data['log'] = self.context['log']
+        
         return data

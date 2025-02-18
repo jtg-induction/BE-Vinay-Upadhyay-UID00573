@@ -90,9 +90,6 @@ DATABASES = {
         u'NAME': u'mydatabase',                      # Add database name.
         u'USER': u'vinay',              # Add psql user name. For default use postgres.
         u'PASSWORD': u'Vinay@010104',                  # Add user password if exists.
-        u'NAME': u'mydatabase',                      # Add database name.
-        u'USER': u'vinay',              # Add psql user name. For default use postgres.
-        u'PASSWORD': u'Vinay@010104',                  # Add user password if exists.
         u'HOST': u'',                      # Set to empty string for localhost..
         u'PORT': u'5432',                  # Psql service running port.
     },

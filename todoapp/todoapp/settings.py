@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'users',
     'todos',
     'projects',
-
-    'django_nose'
+    # 'django_nose'
 ]
 AUTH_USER_MODEL = u'users.CustomUser'
 
@@ -103,7 +102,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE' : 10,
+    'TEST_REQUEST_DEFAULT_FORMAT' : 'json',
 }
 
 
@@ -145,11 +146,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Use nose to run all tests
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# # Use nose to run all tests
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Tell nose to measure coverage on the 'foo' and 'bar' apps
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=users,todos,projects',
-]
+# NOSE_ARGS = [
+#     '--with-coverage',
+#     '--cover-package=users,todos,projects',
+# ]

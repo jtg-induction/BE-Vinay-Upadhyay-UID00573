@@ -90,19 +90,24 @@ DATABASES = {
         u'NAME': u'mydatabase',                      # Add database name.
         u'USER': u'vinay',              # Add psql user name. For default use postgres.
         u'PASSWORD': u'Vinay@010104',                  # Add user password if exists.
+        u'NAME': u'mydatabase',                      # Add database name.
+        u'USER': u'vinay',              # Add psql user name. For default use postgres.
+        u'PASSWORD': u'Vinay@010104',                  # Add user password if exists.
         u'HOST': u'',                      # Set to empty string for localhost..
         u'PORT': u'5432',                  # Psql service running port.
     },
 }
 
 REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.TokenAuthentication',
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#  ),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE' : 10,
+    'TEST_REQUEST_DEFAULT_FORMAT' : 'json',
 }
 
 

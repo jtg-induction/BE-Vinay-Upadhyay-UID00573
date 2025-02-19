@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'users',
     'todos',
     'projects',
-
-    'django_nose'
+    # 'django_nose'
 ]
 AUTH_USER_MODEL = u'users.CustomUser'
 
@@ -88,9 +87,9 @@ WSGI_APPLICATION = 'todoapp.wsgi.application'
 DATABASES = {
     u'default': {
         u'ENGINE': u'django.db.backends.postgresql',
-        u'NAME': u'',                      # Add database name.
-        u'USER': u'postgres',              # Add psql user name. For default use postgres.
-        u'PASSWORD': u'',                  # Add user password if exists.
+        u'NAME': u'mydatabase',                      # Add database name.
+        u'USER': u'vinay',              # Add psql user name. For default use postgres.
+        u'PASSWORD': u'Vinay@010104',                  # Add user password if exists.
         u'HOST': u'',                      # Set to empty string for localhost..
         u'PORT': u'5432',                  # Psql service running port.
     },
@@ -103,7 +102,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE' : 10,
+    'TEST_REQUEST_DEFAULT_FORMAT' : 'json',
 }
 
 
@@ -145,11 +146,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Use nose to run all tests
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# # Use nose to run all tests
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Tell nose to measure coverage on the 'foo' and 'bar' apps
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=users,todos,projects',
-]
+# NOSE_ARGS = [
+#     '--with-coverage',
+#     '--cover-package=users,todos,projects',
+# ]
